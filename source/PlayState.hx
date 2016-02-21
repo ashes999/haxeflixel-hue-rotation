@@ -34,11 +34,11 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		original =  make(50, 100, 0);
-		// rotate30 =  make(300, 100, 30);
-		// rotate60 =  make(550, 100, 60);
-		// rotate90 =  make(50, 350, 90);
-		// rotate120 = make(300, 350, 120);
-		// rotate150 = make(550, 350, 150);
+		rotate30 =  make(300, 100, 1);
+		rotate60 =  make(550, 100, 2);
+		rotate90 =  make(50, 350, 3);
+		rotate120 = make(300, 350, 4);
+		rotate150 = make(550, 350, 5);
 	}
 
 	private function make(x:Int, y:Int, hueRotation:Int) : FlxSprite
@@ -62,7 +62,8 @@ class PlayState extends FlxState
 		var u:Float = Math.cos(hueRotation * Math.PI / 180);
     var w:Float = Math.sin(hueRotation * Math.PI / 180);
 
-		var data = sprite.pixels;
+		var data = sprite.pixels.clone();
+		sprite.pixels = data;
 
 		for (x in 0 ... data.width) {
 			for (y in 0 ... data.height) {
@@ -88,13 +89,9 @@ class PlayState extends FlxState
 						+  (.587 - .588 * u - 1.05 * w) * g
 						+  (.114 + .886 * u - .203 * w) * b;
 
-				//red = 	0xFF000000 | (r * 256 * 256);
-				//green = 0xFF000000 | (g * 256);
-				//blue =	0xFF000000 | b;
-
-				red = r;
+				/*red = r;
 				green = g;
-				blue = b;
+				blue = b;*/
 
 				var output:Int = Math.round(blue+ (256 * green) + (256 * 256 * red));
 

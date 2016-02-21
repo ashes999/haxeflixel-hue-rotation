@@ -15,36 +15,27 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxRandom;
 import openfl.Assets;
 import flixel.system.FlxAssets;
+import flash.filters.ColorMatrixFilter;
 
-#if flash
-import flash.filters.BevelFilter;
-import flash.filters.DisplacementMapFilter;
-import flash.filters.DisplacementMapFilterMode;
-#end
 
 class PlayState extends FlxState
 {
-	var original:FlxSprite;
-	var rotate30:FlxSprite;
-	var rotate60:FlxSprite;
-	var rotate90:FlxSprite;
-	var rotate120:FlxSprite;
-	var rotate150:FlxSprite;
 
 	override public function create():Void
 	{
-		original =  make(50, 100, 0);
-		rotate30 =  make(300, 100, 30);
-		rotate60 =  make(550, 100, 60);
-		rotate90 =  make(50, 350, 90);
-		rotate120 = make(300, 350, 120);
-		rotate150 = make(550, 350, 150);
+		make(0, 0, 0);
+		make(200, 100, 30);
+		make(400, 100, 60);
+		make(600, 100, 90);
+		make(200, 300, 120);
+		make(400, 300, 150);
+		make(600, 300, 180);
 	}
 
 	private function make(x:Int, y:Int, hueRotation:Int) : FlxSprite
 	{
 		var sprite:FlxSprite = new FlxSprite();
-		sprite.loadGraphic('assets/wrgb.png');
+		sprite.loadGraphic('assets/axolotl.png');
 		add(sprite);
 
 		// set x/y
@@ -59,41 +50,21 @@ class PlayState extends FlxState
 
 	private function rotateHue(sprite:FlxSprite, hueRotation:Int)
 	{
-		var u:Float = Math.cos(hueRotation * Math.PI / 180);
-    var w:Float = Math.sin(hueRotation * Math.PI / 180);
-
 		// Since we're reusing the same image, clone it so that pixel data changes
 		// for each copy of the sprite
 		var data = sprite.pixels.clone();
 		sprite.pixels = data;
 
-		for (x in 0 ... data.width) {
-			for (y in 0 ... data.height) {
-				var input = data.getPixel(x, y);
+		// http://stackoverflow.com/questions/8507885/shift-hue-of-an-rgb-color
 
-				var r:Int = (input >> 16) & 0xFF;
-				var g:Int = (input >> 8) & 0xFF;
-				var b:Int = input & 0xFF;
+		var cosA = Math.cos(hueRotation * Math.PI / 180);
+		var sinA = Math.sin(hueRotation * Math.PI / 180);
 
-				var red:Float = (.299 + .701 * u + .168 * w) * r
-						+  (.587 - .587 * u + .330 * w) * g
-						+  (.114 - .114 * u - .497 * w) * b;
-
-				var green:Float = (.299 - .299 * u - .328 * w) * r
-						+  (.587 + .413 * u + .035 * w) * g
-						+  (.114 - .114 * u + .292 * w) * b;
-
-				var blue:Float = (.299 - .3 * u + 1.25 * w) * r
-						+  (.587 - .588 * u - 1.05 * w) * g
-						+  (.114 + .886 * u - .203 * w) * b;
-
-				var output:Int = Math.round(blue + (256 * green) + (256 * 256 * red));
-				trace('out: ${red} ${green} ${blue}');
-
-				data.setPixel(x, y, output);
-			}
-		}
-
+		sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new Point(), new ColorMatrixFilter(
+			[cosA + (1.0 - cosA) / 3.0, 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, 0, 0,
+			1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0*(1.0 - cosA), 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 0, 0,
+			1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0 * (1.0 - cosA), 0, 0,
+			0, 0, 0, 1, 0])); // identity row
 	}
 
 	override public function update():Void

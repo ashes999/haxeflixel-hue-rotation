@@ -20,32 +20,32 @@ import flash.filters.ColorMatrixFilter;
 
 class PlayState extends FlxState
 {
+	private static inline var HUE_INCREMENT:Int = 60;
+	private static var next:Int = 0;
 
 	override public function create():Void
 	{
-		make(0, 0, 0);
-		make(200, 100, 45);
-		make(400, 100, 90);
-		make(600, 100, 135);
-		make(800, 100, 180);
-		make(200, 300, 225);
-		make(400, 300, 270);
-		make(600, 300, 315);
-		make(800, 300, 360);
+		var hueRotation:Int = 0;
+		while (hueRotation < 360) {
+			make(hueRotation);
+			hueRotation += HUE_INCREMENT;
+		}
 	}
 
-	private function make(x:Int, y:Int, hueRotation:Int) : FlxSprite
+	private function make(hueRotation:Int) : FlxSprite
 	{
 		var sprite:FlxSprite = new FlxSprite();
 		sprite.loadGraphic('assets/axolotl.png');
 		add(sprite);
 
 		// set x/y
-		sprite.x = x;
-		sprite.y = y;
+		sprite.x = (next % 4) * 200;
+		sprite.y = Math.floor(next / 4) * 200;
 
 		// rotate hue
 		rotateHue(sprite, hueRotation);
+
+		next++;
 
 		return sprite;
 	}

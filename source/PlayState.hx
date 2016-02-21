@@ -24,12 +24,14 @@ class PlayState extends FlxState
 	override public function create():Void
 	{
 		make(0, 0, 0);
-		make(200, 100, 30);
-		make(400, 100, 60);
-		make(600, 100, 90);
-		make(200, 300, 120);
-		make(400, 300, 150);
-		make(600, 300, 180);
+		make(200, 100, 45);
+		make(400, 100, 90);
+		make(600, 100, 135);
+		make(800, 100, 180);
+		make(200, 300, 225);
+		make(400, 300, 270);
+		make(600, 300, 315);
+		make(800, 300, 360);
 	}
 
 	private function make(x:Int, y:Int, hueRotation:Int) : FlxSprite
@@ -57,14 +59,18 @@ class PlayState extends FlxState
 
 		// http://stackoverflow.com/questions/8507885/shift-hue-of-an-rgb-color
 
-		var cosA = Math.cos(hueRotation * Math.PI / 180);
-		var sinA = Math.sin(hueRotation * Math.PI / 180);
+		var cosA:Float = Math.cos(hueRotation * Math.PI / 180);
+		var sinA:Float = Math.sin(hueRotation * Math.PI / 180);
 
 		sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new Point(), new ColorMatrixFilter(
 			[cosA + (1.0 - cosA) / 3.0, 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, 0, 0,
 			1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0*(1.0 - cosA), 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 0, 0,
 			1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0 * (1.0 - cosA), 0, 0,
 			0, 0, 0, 1, 0])); // identity row
+
+		#if flash
+			sprite.dirty = true; // make this work on Flash, too
+		#end
 	}
 
 	override public function update():Void

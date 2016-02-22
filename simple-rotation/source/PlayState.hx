@@ -58,9 +58,9 @@ class PlayState extends FlxState
 		sprite.pixels = data;
 
 		// http://stackoverflow.com/questions/8507885/shift-hue-of-an-rgb-color
-
-		var cosA:Float = Math.cos(hueRotation * Math.PI / 180);
-		var sinA:Float = Math.sin(hueRotation * Math.PI / 180);
+		// -hueRotation to match GIMP's direction of rotation
+		var cosA:Float = Math.cos(-hueRotation * Math.PI / 180);
+		var sinA:Float = Math.sin(-hueRotation * Math.PI / 180);
 
 		var a1:Float =	cosA + (1.0 - cosA) / 3.0;
 		var a2:Float =	1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA;

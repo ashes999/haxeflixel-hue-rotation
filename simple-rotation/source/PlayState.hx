@@ -35,7 +35,7 @@ class PlayState extends FlxState
 	private function make(hueRotation:Int) : FlxSprite
 	{
 		var sprite:FlxSprite = new FlxSprite();
-		sprite.loadGraphic('assets/axolotl.png');
+		sprite.loadGraphic('assets/wrgb.png');
 		add(sprite);
 
 		// set x/y
@@ -62,10 +62,22 @@ class PlayState extends FlxState
 		var cosA:Float = Math.cos(hueRotation * Math.PI / 180);
 		var sinA:Float = Math.sin(hueRotation * Math.PI / 180);
 
+		var a1:Float =	cosA + (1.0 - cosA) / 3.0;
+		var a2:Float =	1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA;
+		var a3:Float =	1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA;
+
+		var b1:Float =	a3;
+		var b2:Float = 	cosA + 1.0/3.0 * (1.0 - cosA);
+		var b3:Float =	a2;
+
+		var c1:Float =	a2;
+		var c2:Float =	a3;
+		var c3:Float = 	b2;
+
 		sprite.pixels.applyFilter(sprite.pixels, sprite.pixels.rect, new Point(), new ColorMatrixFilter(
-			[cosA + (1.0 - cosA) / 3.0, 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, 0, 0,
-			1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0*(1.0 - cosA), 1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 0, 0,
-			1.0/3.0 * (1.0 - cosA) - Math.sqrt(1.0/3.0) * sinA, 1.0/3.0 * (1.0 - cosA) + Math.sqrt(1.0/3.0) * sinA, cosA + 1.0/3.0 * (1.0 - cosA), 0, 0,
+			[a1, b1, c1, 0, 0,
+			a2, b2, c2, 0, 0,
+			a3, b3, c3, 0, 0,
 			0, 0, 0, 1, 0])); // identity row
 
 		#if flash

@@ -5,14 +5,12 @@ import flash.filters.BlurFilter;
 import flash.filters.DropShadowFilter;
 import flash.filters.GlowFilter;
 import flash.geom.Point;
-import flixel.effects.FlxSpriteFilter;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.util.FlxRandom;
 import openfl.Assets;
 import flixel.system.FlxAssets;
 import flash.filters.ColorMatrixFilter;
@@ -92,8 +90,8 @@ class PlayState extends FlxState
 		#end
 	}
 
-	override public function update():Void
+	override public function update(elapsed:Float):Void
 	{
-		super.update();
+		super.update(elapsed);
 	}
 }
